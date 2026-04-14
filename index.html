@@ -802,3 +802,44 @@
 </script>
 </body>
 </html>
+
+    document.getElementById('btnResetData').addEventListener('click', () => {
+        if(confirm("Сбросить все опросы и вернуть 5 предустановленных пустых опросов? Все ваши созданные опросы удалятся, а голоса обнулятся.")) {
+            surveys = getPredefinedEmptySurveys();
+            saveData();
+            selectedSurveyId = surveys[0]?.id || null;
+            currentChartType = 'bar';
+            renderSurveysList();
+            if (selectedSurveyId) {
+                renderSurveyDetails();
+            } else {
+                document.getElementById('surveyDetails').innerHTML = `<div class="empty-state">
+                    <i class="fas fa-hand-pointer"></i>
+                    <h3>Выберите опрос</h3>
+                    <p>Кликните на опрос из списка выше, чтобы увидеть статистику и проголосовать.</p>
+                </div>`;
+            }
+            showToast("Данные сброшены к 5 пустым опросам");
+        }
+    });
+
+    // Запуск приложения
+    loadData();
+    renderOptionInputs();
+    renderSurveysList();
+    if(surveys.length) {
+        selectedSurveyId = surveys[0].id;
+        renderSurveysList();
+        renderSurveyDetails();
+    } else {
+        document.getElementById('surveyDetails').innerHTML = `<div class="empty-state">
+            <i class="fas fa-hand-pointer"></i>
+            <h3>Нет опросов</h3>
+            <p>Создайте опрос или нажмите «Сбросить данные».</p>
+        </div>`;
+    }
+
+    window.castVote = castVote;
+</script>
+</body>
+</html>
